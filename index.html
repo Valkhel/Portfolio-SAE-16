@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - SAE 16</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-gray: #7f8c8d;
+            --text-light: #ecf0f1;
+            --border-color: #e9ecef;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Subtle background pattern */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--light-bg);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(52, 152, 219, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(44, 62, 80, 0.05) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px var(--shadow-light);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main content */
+        main {
+            padding-top: 80px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .hero-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-image {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--border-color);
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 10px 40px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(52, 152, 219, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero .description {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+
+        .cta-button:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Projects section */
+        .projects {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 4rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(52, 152, 219, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .project-description {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Project modal */
+        .project-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px var(--shadow-light);
+        }
+
+        .close-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px var(--shadow-light);
+        }
+
+        .project-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .project-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .project-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .project-section p, .project-section ul {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .project-section ul {
+            padding-left: 1.5rem;
+        }
+
+        .project-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-to-projects {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            color: var(--primary-color);
+            text-decoration: none;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-projects:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px var(--shadow-light);
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(44, 62, 80, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .profile-image {
+                width: 250px;
+                height: 250px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#projets">Projets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="accueil" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Hippolyte Foreau</h1>
+                        <p class="subtitle">Étudiant en BUT Réseaux et Télécommunications</p>
+                        <p class="description">
+                            Les technologies de réseau et les télécommunications me passionnent. Voici mon portfolio développé dans le cadre de la SAE 16 à l'IUT de Ifs. Découvrez mon parcours scolaire et mes réalisations.
+                        </p>
+                        <a href="#projets" class="cta-button">Découvrir mes projets</a>
+                    </div>
+                    <div class="hero-image">
+                        <!-- Remplacez 'votre-photo.jpg' par le chemin vers votre photo -->
+                        <img src="/imgs/pic.jpg "alt="Photo de profil" class="profile-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projets" class="projects">
+            <div class="container">
+                <h2 class="section-title">Mes Projets</h2>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Les projets seront ajoutés ici par JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal pour les projets -->
+    <div id="project-modal" class="project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modal-image" src="" alt="" class="modal-image">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h2 id="modal-title" class="modal-title"></h2>
+                <div id="modal-link-container"></div>
+                <div class="project-section">
+                    <h3>Description</h3>
+                    <p id="modal-description"></p>
+                </div>
+                <div class="project-section">
+                    <h3>Compétences visées</h3>
+                    <ul id="modal-competences"></ul>
+                </div>
+                <div class="project-section">
+                    <h3>Apprentissages critiques mobilisés</h3>
+                    <ul id="modal-apprentissages"></ul>
+                </div>
+                <div class="project-section">
+                    <h3>Difficultés rencontrées</h3>
+                    <p id="modal-difficultes"></p>
+                </div>
+                <div class="project-section">
+                    <h3>Traces et preuves</h3>
+                    <p id="modal-traces"></p>
+                </div>
+                <div class="project-section">
+                    <h3>Réflexion personnelle et auto-évaluation</h3>
+                    <p id="modal-reflexion"></p>
+                </div>
+                <a href="#projets" class="back-to-projects" onclick="closeModal()">← Retour aux projets</a>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="mailto:hippolyteforeaulemaire@gmail.com" class="social-link" title="Email">
+                    ✉
+                </a>
+                <a href="https://github.com/Valkhel" class="social-link" title="GitHub" target="_blank">
+                    🔗
+                </a>
+                <a href="/files/cv.pdf" class="social-link" title="CV" target="_blank">
+                    📄
+                </a>
+            </div>
+            <p>&copy; 2025 Hippolyte Foreau. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Données des projets - Modifiez cette section pour ajouter vos projets
+        const projects = [
+            {
+                id: 1,
+                title: "Formation en ligne",
+                shortDescription: "SAE11 - Sensibilisation à l'hygiène informatique et à la cybersécurité",
+                image: "/imgs/sae11.jpg",
+                description: "MOOC de l'ANSSI (Agence nationale de la sécurité des systèmes d'information) en auto-apprentissage. Ce cours en ligne propose une introduction accessible mais rigoureuse aux fondamentaux de la cybersécurité, à travers des modules interactifs, des vidéos explicatives et des quiz.",
+                link: "/files/mooc_hippolyte.pdf", // Laissez vide pour ne pas afficher le lien
+                competences: [
+                    "Compréhension des principes de base de la cybersécurité",
+                    "Compréhension des principes de base de la cybersécurité",
+                    "Bonnes pratiques en matière de sécurité numérique (mots de passe, navigation, etc.)",
+                    "Connaissance des enjeux juridiques et organisationnels de la sécurité informatique"
+                ],
+                apprentissages: [
+                    "Comprendre l’architecture et le fonctionnement de systèmes multi-utilisateurs et en assurer les fonctions d’administration de base",
+                    "Maîtriser les rôles et les principes fondamentaux des systèmes d’exploitation ainsi qu’interagir avec ceux-ci pour la configuration et l’administration de réseaux et services",
+                    "Identifier les dysfonctionnements du réseau local et savoir les signaler"
+                ],
+                difficultes: "Le plus grand défi a été de prioriser les tâches dans un temps limité tout en maintenant la cohérence globale du réseau. Certaines configurations avancées, comme le cache DNS ou les tests de sécurité approfondis, demandaient une bonne maîtrise des outils tout en s’intégrant dans un environnement semi-réaliste.",
+                traces: "Fichier de validation du MOOC officiel, accessible via le lien en haut de page.",
+                reflexion: "Ce MOOC m’a permis de prendre conscience de l’importance de la cybersécurité au quotidien, même en dehors des métiers techniques. Il m’a donné des bases solides pour aller plus loin et m’a sensibilisé aux responsabilités de chacun dans la protection des systèmes d’information."
+            },
+            {
+                id: 2,
+                title: "Création d'un premier réseau informatique",
+                shortDescription: "SAE12: S'initier aux réseaux informatiques",
+                image: "/imgs/sae12.jpg",
+                description: "Dans le cadre d’un projet de mise en œuvre réseau pour l'entreprise fictive Fibre&Company, j'ai été chargé de concevoir un prototype complet d'infrastructure réseau modernisée. L’objectif était d’adapter le système existant à une montée en charge (doublement des effectifs) tout en intégrant des pratiques de cybersécurité et de virtualisation.",
+                link: "", // Pas de lien pour ce projet
+                competences: [
+                    "Conception et mise en œuvre d’un réseau structuré avec VLANs, RSTP et routage inter-VLANs",
+                    "Configuration d’équipements Cisco (switchs L2/L3, routeurs) et gestion de liens agrégés",
+                    "Mise en place de services réseau sur une VM Debian : DHCP, DNS cache, partage de fichiers (SMB), service web (Nginx)",
+                    "Gestion des utilisateurs Linux avec répartition par services et sécurisation des accès (SSH avec clés, restriction de shell)",
+                    "Application de mesures de sécurité réseau : désactivation Telnet, VLAN de quarantaine, limitation des accès, protection de la table CAM",
+                    "Utilisation d’outils de génération de comptes utilisateurs (pwgen, newusers)"
+                ],
+                apprentissages: [
+                    "Maîtriser les lois fondamentales de l’électricité afin d’intervenir sur des équipements de réseaux et télécommunications",
+                    "Comprendre l’architecture et les fondements des systèmes numériques, les principes de codage de l’information, des communications et des services",
+                    "Configurer les fonctions de base du réseau local",
+                    "Maîtriser les rôles et les principes fondamentaux des systèmes d’exploitation ainsi qu’interagir avec ceux-ci pour la configuration et l’administration de réseaux et services",
+                    "Identifier les dysfonctionnements du réseau local et/ou des services liés",
+                    "Installer un poste client, expliquer la procédure mise en place"
+                ],
+                difficultes: "L'intégration du protocole SNMP et la gestion des timeouts ont nécessité plusieurs itérations pour obtenir une application stable.",
+                traces: "Captures d’écran des configurations des commutateurs, du routage, des services installés sur Debian. Plan d’adressage IPv4 utilisé. Fichiers de configuration du serveur Debian et copies des tests fonctionnels (ping, accès SMB, SSH, etc.",
+                reflexion: "Ce projet m’a permis de mettre en pratique un ensemble de compétences techniques dans un contexte proche du réel. Il m’a donné une vue d’ensemble du rôle d’un administrateur réseau, surtout en tant que chef de projet, mêlant conception, déploiement, sécurisation et documentation. Il m’a aussi sensibilisé à la priorisation des tâches et à l’importance de la documentation rigoureuse pour garantir un passage en production maîtrisé."
+            },
+            {
+                id: 3,
+                title: "Photométrie en fibre optique",
+                shortDescription: "SAE13: Photométrie en fibre optique",
+                image: "/imgs/sae13.jpg",
+                description: "Ce projet avait pour objectif de caractériser une liaison fibre optique inconnue à travers des mesures photométriques précises. Il s’agissait d’évaluer les pertes optiques en éliminant les biais liés aux équipements intermédiaires, notamment les jarretières, par un calibrage rigoureux des instruments de mesure. Les mesures ont été réalisées à une longueur d’onde de 1310 nm, couramment utilisée pour limiter l’atténuation dans les réseaux optiques. L'ensemble des réglages a été effectué selon une procédure normalisée, afin de garantir la fiabilité des résultats.",
+                link: "",
+                competences: [
+                    "Manipulation d'instruments de mesure optique (source laser, photomètre)",
+                    "Réalisation de calibrages pour isoler les pertes liées à la liaison testée",
+                    "Analyse et interprétation des mesures optiques",
+                    "Application des bonnes pratiques de nettoyage et de connexion en fibre optique"
+                ],
+                apprentissages: [
+                    "Mesurer et analyser les signaux",
+                    "Déployer des supports de transmission",
+                    "Communiquer avec un tiers (client, collaborateur…) et adapter son discours et sa langue à son interlocuteur"
+                ],
+                difficultes: "L'exigence de précision lors des calibrages et la nécessité d’éviter toute contamination optique ont été des points critiques. Ces contraintes ont été surmontées par l’utilisation d’outils de nettoyage adaptés et une application stricte des protocoles.",
+                traces: "Traces d'images et mesures à l'oscilloscope",
+                reflexion: "Ce projet m’a permis de consolider mes compétences en mesures optiques et de mieux comprendre l’importance du soin apporté aux étapes préparatoires. J’en retire une meilleure aisance dans l’approche expérimentale et l’analyse technique en environnement fibre optique."
+            },
+            {
+                id: 4,
+                title: "Création d'un premier site web",
+                shortDescription: "SAE14: Se présenter sur internet",
+                image: "/imgs/sae14.jpg",
+                description: "Le projet consistait à développer un site internet. Je l'ai réalisé sur le thème de la Pat Patrouille, composé d'au moins trois pages principales : une page d'accueil visuelle, une page dédiée au contenu thématique et une page À propos présentant l’auteur (moi-même). Des pages supplémentaires pouvaient être ajoutées, comme une page de contact ou des présentations de services. Le site devait respecter une charte graphique cohérente, passer la validation W3C pour HTML et CSS, et être conforme à la norme WCAG 2.0 AA pour l’accessibilité. Les techniques de mise en page Flexbox et/ou CSS Grid étaient utilisées pour garantir une structure fluide. Une des exigences majeures était que le site soit adaptatif, s’affichant correctement sur tous les appareils (ordinateur, tablette et mobile).",
+                link: "https://github.com/Valkhel/sae14",
+                competences: [
+                    "Développement web adaptatif avec utilisation de Flexbox et CSS Grid",
+                    "Application des normes d’accessibilité WCAG 2.0",
+                    "Validation HTML/CSS via les outils W3C",
+                    "Animations CSS pour dynamiser l’interface",
+                    "Gestion d'un projet en utilisant GitHub (repository et Pages)"
+                ],
+                apprentissages: [
+                    "Utiliser un système informatique et ses outils",
+                    "Concevoir l’architecture et les technologies d’un site Web"
+                ],
+                difficultes: "Le principal défi a été d’assurer une adaptation parfaite du site sur tous les supports (responsive design), notamment à travers l’utilisation de media queries. La difficulté résidait dans l’ajustement des tailles d’éléments pour chaque type d’appareil, tout en maintenant l’intégrité de la mise en page. Cela demandait des tests répétés et une attention particulière à l'optimisation de la structure en fonction des résolutions.",
+                traces: "Site internet disponible sur le lien ainsi que le code sur github.",
+                reflexion: "Ce projet m’a permis de perfectionner mes compétences en développement front-end, en particulier sur les aspects de responsive design et d’accessibilité. J’ai également appris à travailler avec GitHub pour gérer le versionnage du code et l’hébergement via GitHub Pages. Le défi technique lié aux media queries m’a renforcé dans la compréhension de l’importance de l’adaptation des interfaces en fonction des supports d’affichage."
+            },
+            {
+                id: 5,
+                title: "Utilisation d'une API pokemon",
+                shortDescription: "SAE15: Traitement des données",
+                image: "/imgs/sae15.png",
+                description: "Dans ce projet, j’ai développé deux outils en Python permettant d’interagir avec l’API RESTful PokéAPI. Le premier génère automatiquement une fiche descriptive d’un Pokémon (taille, poids, types, stats, image) aux formats Markdown et HTML ; le second produit des statistiques comparatives sur plusieurs Pokémon à partir des données récupérées via l’API.",
+                link: "",
+                competences: [
+                    "Utilisation d’une API REST avec la bibliothèque requests",
+                    "Traitement et structuration de données au format JSON",
+                    "Génération dynamique de fichiers Markdown et HTML",
+                    "Implémentation d’un système de cache local",
+                    "Analyse de données pour produire des statistiques simples"
+                ],
+                apprentissages: [
+                    "Utiliser un système informatique et ses outils",
+                    "Lire, exécuter, corriger et modifier un programme",
+                    "Traduire un algorithme, dans un langage ou pour un environnement donné",
+                    "Concevoir l’architecture et les technologies d’un site Web",
+                    "Choisir les mécanismes de gestion des données adaptés au développement de l’outil et argumenter ce choix",
+                    "S’intégrer dans un environnement projet ou de développement et en suivre l’avancement collaboratif"
+                ],
+                difficultes: "Ce qui a été le plus compliqué était la conversion des fichiers en markdown et en html",
+                traces: "Il y a encore le code python de toutes les tâches réalisées",
+                reflexion: "Ce projet m’a permis de mieux comprendre le fonctionnement d’une API RESTful et m’a donné un aperçu concret de la récupération et de l’exploitation de données externes dans un projet Python. J’ai aussi appris l’importance de structurer un code réutilisable et robuste, notamment avec l’ajout d’un cache et d’un module de conversion réutilisable. C’est une expérience motivante et formatrice."
+            },
+            {
+                id: 6,
+                title: "Active Directory, Windows Serveur 2019",
+                shortDescription: "SAE21: Construire un réseau info pour une petite structure",
+                image: "/imgs/sae21.png",
+                description: "Le projet SAE 21, inscrit dans le programme de deuxième année du BUT Réseaux et Télécommunications, visait à approfondir la maîtrise des environnements systèmes et réseaux à travers plusieurs volets pédagogiques complémentaires. Le projet, réalisé au sein de l’IUT Grand Ouest Normandie, comportait plusieurs axes : cours CCNA, TP noté individuel, étude de la sécurité dans un environnement Windows ADDS, ainsi que l’utilisation de ressources documentaires spécialisées sur les enjeux de sécurité dans les environnements hybrides, notamment les plateformes d’identité Microsoft (Active Directory et Azure AD). Ce projet a permis de travailler à la fois sur des compétences techniques et sur la gestion de la sécurité dans un contexte hybride Cloud. Le cours s’est particulièrement concentré sur les enjeux de sécurité des environnements hybrides, avec un focus sur les plateformes d'identité telles qu'Active Directory et Azure Active Directory. Il a abordé la compréhension des phases d'attaque contre ces plateformes et les contre-mesures à mettre en place. Ce projet a permis d’identifier les bonnes pratiques pour sécuriser l’authentification dans des environnements hybrides, tout en explorant des alternatives aux mots de passe, comme l’authentification multi-facteurs et les clés de sécurité.",
+                link: "",
+                competences: [
+                    "Réseaux : Configuration de commutateurs et routeurs Cisco dans le cadre du module CCNA (Switching, Routing and Wireless Essentials).",
+                    "Systèmes : Administration d’environnements Windows Server et Active Directory.",
+                    "Sécurité informatique : Analyse des risques et des bonnes pratiques de sécurité dans les environnements hybrides (Active Directory, Azure Active Directory, Cloud).",
+                    "Sécurisation des identités : Mise en œuvre des contre-mesures face aux menaces modernes sur les plateformes d’identité."
+                ],
+                apprentissages: [
+                    "Comprendre l’architecture et les fondements des systèmes numériques, les principes de codage de l’information, des communications et des services",
+                    "Configurer les fonctions de base du réseau local",
+                    "Maîtriser les rôles et les principes fondamentaux des systèmes d’exploitation ainsi qu’interagir avec ceux-ci pour la configuration et l’administration de réseaux et services",
+                    "Identifier les dysfonctionnements du réseau local et/ou des services liés",
+                    "Installer un poste client, expliquer la procédure mise en place"
+                ],
+                difficultes: "Une des difficultés majeures a été la gestion de l’autonomie dans le travail pour les modules CCNA et la gestion des ressources Microsoft. La complexité des sujets, comme la sécurité des environnements hybrides et la gestion des identités Cloud, a nécessité une planification rigoureuse pour pouvoir tout aborder de manière efficace. De plus, l’absence d’accès aux labs de hack a restreint l’aspect pratique de la sécurité, ce qui m’a poussé à combler cette lacune par une approche théorique approfondie et en consultant des démonstrations en ligne.",
+                traces: "Examen cisco validé, pas d'autres preuves concrètes mais les compétences sont là !",
+                reflexion: "Ce projet a renforcé mes compétences techniques et m’a aidé à développer des méthodes de travail autonome, cruciales pour ma future carrière professionnelle. J’ai appris à gérer des sujets complexes, notamment en matière de sécurité des environnements hybrides, et à appliquer des contre-mesures face aux attaques contre les plateformes d’identité. Ce projet m’a préparé à comprendre et à gérer les risques liés à la gestion des identités dans un monde de plus en plus hybride et Cloud, tout en mettant l’accent sur l’importance d’une approche sécurisée et bien structurée."
+            },
+            {
+                id: 7,
+                title: "Exploration des spectres de fréquence",
+                shortDescription: "SAE22: Mesurer et caractériser un signal ou un système",
+                image: "/imgs/sae22.jpg",
+                description: "Le projet SAÉ 22, dans le cadre du programme de Réseaux et Télécommunications à l'IUT Grand Ouest Normandie, s’est concentré sur l’exploration et l’analyse du spectre électromagnétique, en particulier celui lié à la téléphonie mobile. L’objectif était d’offrir une compréhension concrète des émissions radioélectriques et de leur impact dans notre environnement quotidien. Ce projet a permis de se familiariser avec les systèmes de transmission sans fil (FM, TV numérique terrestre, 2G/3G/4G/5G) et de mettre en pratique des mesures spectrales à l’aide d’outils professionnels comme le RTL-SDR et MATLAB. Le projet s’est divisé en deux parties distinctes :",
+                link: "",
+                competences: [
+                    "Radiofréquences et traitement du signal : Maîtrise des outils de mesure RF, notamment le RTL-SDR, et des techniques de caractérisation du spectre.",
+                    "Programmation MATLAB : Utilisation avancée de MATLAB pour l’analyse spectrale et la correction des calculs de puissance en dBm dans les scripts.",
+                    "Analyse des systèmes de télécommunication : Étude des différents types d’émissions (FM, télévision, téléphonie mobile 2G/3G/4G/5G) et compréhension de leur impact.",
+                    "Géolocalisation des émetteurs : Utilisation de cartoradio.fr pour localiser les émetteurs mobiles et corréler les résultats avec des mesures pratiques.",
+                    "Optimisation des antennes : Calcul de la longueur optimale d’antenne pour des fréquences spécifiques (~1 GHz), en fonction des besoins de mesure.",
+                    "Analyse de données réglementaires : Interprétation des bases de données officielles, comme celles fournies par l’ARCEP et l’ANFR, pour valider les résultats de mesures spectrales."
+                ],
+                apprentissages: [
+                    "Mesurer et analyser les signaux",
+                    "Caractériser des systèmes de transmission élémentaires et découvrir la modulation ainsi que les techniques de leur fonctionnement",
+                    "Déployer des supports de transmission",
+                    "Communiquer avec un tiers (client, collaborateur…) et adapter son discours et sa langue à son interlocuteur"
+                ],
+                difficultes: "Limitations du RTL-SDR : L’utilisation du RTL-SDR a été limitée par sa fréquence maximale de 1700 MHz, obligeant à adapter les mesures et à maximiser l’utilisation de son potentiel dans les bandes accessibles.",
+                traces: "Fichiers de configurations matlab pour l'utilisation de RTL-SDR, et de nombreux captures d'écrans réalisées dans des compte-rendu notés.",
+                reflexion: "Ce projet m’a permis de comprendre concrètement l'impact des émissions radioélectriques et des systèmes de télécommunication dans notre quotidien. J’ai renforcé mes compétences en mesure RF et en analyse spectrale avec des outils professionnels comme le RTL-SDR et MATLAB. J'ai également appris à interpréter les données réglementaires et à corréler des informations issues de bases de données comme cartoradio.fr avec des mesures réelles. Enfin, ce projet m’a permis d’acquérir des compétences techniques dans l’analyse des systèmes sans fil, ce qui est un atout majeur pour ma future carrière dans les réseaux et télécommunications. L'analyse de différents spectres m’a donné une vision réaliste de l’utilisation des technologies de communication mobile modernes, ce qui est essentiel dans le domaine des télécommunications."
+            },
+            {
+                id: 8,
+                title: "Création d'une application météo",
+                shortDescription: "SAE23: Mettre en place une solution info pour l'entreprise",
+                image: "/imgs/sae23.jpg",
+                description: "Le projet SAÉ 23, dans le cadre du programme de Développement Web, visait à réaliser une page Web interactive permettant à l’utilisateur d’afficher des informations météorologiques en temps réel pour une commune donnée, en utilisant une API et des manipulations JavaScript pour dynamiser l’expérience utilisateur. L’application s’appuie sur une API Météo Concept pour récupérer les prévisions météorologiques. L’objectif principal était de travailler sur l’intégration des données fournies par l’API dans une page HTML et d’enrichir cette application en version avancée en ajoutant des fonctionnalités supplémentaires comme la possibilité de sélectionner la durée des prévisions, d’ajouter des informations météorologiques supplémentaires, et d’améliorer l’interface utilisateur.",
+                link: "https://github.com/Valkhel/SAE23_InstantWeather",
+                competences: [
+                    "Utilisation d'une APi",
+                    "Manipulation du gestion dynamique",
+                    "Gestion des évènements avec Javascript",
+                    "Accessibilité de la page, rendant l'interface le plus accessible possible"
+                ],
+                apprentissages: [
+                    "Utiliser un système informatique et ses outils",
+                    "Lire, exécuter, corriger et modifier un programme",
+                    "Traduire un algorithme, dans un langage ou pour un environnement donné",
+                    "Concevoir l’architecture et les technologies d’un site Web",
+                    "Choisir les mécanismes de gestion des données adaptés au développement de l’outil et argumenter ce choix",
+                    "S’intégrer dans un environnement projet ou de développement et en suivre l’avancement collaboratif"
+                ],
+                difficultes: "Carte interactive : L’intégration de la carte pour afficher les informations météorologiques sur des repères géographiques a été une partie technique assez complexe. J’ai utilisé des outils comme Leaflet.js ou Google Maps API pour cela.",
+                traces: "Le site web est disponible ainsi que le code sur github via le lien",
+                reflexion: "Ce projet m’a permis d'approfondir mes compétences en JavaScript, en particulier dans l’interaction avec des APIs et la manipulation dynamique du DOM. L’ajout de fonctionnalités supplémentaires comme le dark mode et la carte interactive a enrichi mon expérience de développement et m’a permis de rendre l’application plus conviviale et fonctionnelle. De plus, en prenant en compte les critères d’accessibilité et de responsive design, ce projet m’a donné les outils nécessaires pour concevoir des pages Web modernes et adaptées à tous les utilisateurs. Cette expérience m’a préparé à aborder des projets plus complexes, tout en me fournissant une bonne maîtrise des outils nécessaires au développement Web."
+            },
+            {
+                id: 9,
+                title: "Création d'un réseau d'entreprise",
+                shortDescription: "SAE24: Projet intégratif en groupe",
+                image: "/imgs/sae24.png",
+                description: "Le projet SAÉ 24, dans le cadre du programme de Réseaux et Télécommunications à l'IUT Grand Ouest Normandie, était un projet intégratif d'une durée de 3 semaines, réalisé en groupe. L'objectif était de concevoir et déployer une infrastructure réseau complète pour la société fictive Fibre&Company, spécialisée dans le déploiement de la fibre optique. Ce projet avait pour but de mettre en application l'ensemble des compétences acquises durant la première année du BUT. Le projet visait à réaliser une architecture réseau complexe pour une entreprise moderne, comprenant à la fois un réseau WAN, un réseau LAN segmenté par VLANs, des services d'infrastructure (serveur web, contrôleur de domaine), et des mesures de sécurité réseau adaptées à des besoins professionnels.",
+                link: "",
+                competences: [
+                    "Administration réseau et systèmes : Configuration avancée des équipements Cisco, gestion des VLANs et des protocoles de routage dynamique.",
+                    "Virtualisation : Mise en place de machines virtuelles sous Proxmox et déploiement de services sous Debian et Windows Server.",
+                    "Sécurité réseau : Mise en œuvre de bonnes pratiques de sécurité, sécurisation des accès SSH, désactivation de services non sécurisés et application des recommandations de l’ANSSI.",
+                    "Gestion de projet technique : Coordination en équipe pour la gestion des tâches, l'utilisation de Trello et la rédaction de la documentation technique.",
+                    "Planification d’adressage IP : Conception d’un plan d’adressage optimisé pour l'entreprise, avec gestion des sous-réseaux et des masques de sous-réseau."
+                ],
+                apprentissages: [
+                    "Comprendre l’architecture et les fondements des systèmes numériques, les principes de codage de l’information, des communications et des services",
+                    "Configurer les fonctions de base du réseau local",
+                    "Maîtriser les rôles et les principes fondamentaux des systèmes d’exploitation ainsi qu’interagir avec ceux-ci pour la configuration et l’administration de réseaux et services",
+                    "Identifier les dysfonctionnements du réseau local et/ou des services liés",
+                    "Installer un poste client, expliquer la procédure mise en place",
+                    "Mesurer et analyser les signaux",
+                    "Caractériser des systèmes de transmission élémentaires et découvrir la modulation ainsi que les techniques de leur fonctionnement",
+                    "Déployer des supports de transmission",
+                    "Connecter les systèmes de ToIP",
+                    "Communiquer avec un tiers (client, collaborateur…) et adapter son discours et sa langue à son interlocuteur",
+                    "Utiliser un système informatique et ses outils",
+                    "Lire, exécuter, corriger et modifier un programme",
+                    "Traduire un algorithme, dans un langage ou pour un environnement donné",
+                    "Concevoir l’architecture et les technologies d’un site Web",
+                    "Choisir les mécanismes de gestion des données adaptés au développement de l’outil et argumenter ce choix",
+                    "S’intégrer dans un environnement projet ou de développement et en suivre l’avancement collaboratif"
+                ],
+                difficultes: "La difficulté principale que l'on a rencontré était de connecter le réseau virtuel gns3 avec le réseau physique du routeur ",
+                traces: "Fichiers de configuration des routeurs, le fichier gns3 ainsi que les sites webs vitrines sont encore disponibles.",
+                reflexion: "Ce projet intégratif a été une excellente occasion de mettre en pratique toutes les compétences acquises au cours de la première année de BUT en Réseaux et Télécommunications. J’ai acquis une expérience pratique et approfondie dans la conception et le déploiement d’une infrastructure réseau complète, en tenant compte des exigences de sécurité, de performance et de fiabilité. Travailler en équipe en tant que chef de projet sur un projet d’une telle envergure m’a permis de renforcer mes compétences en gestion de projet et en communication technique. En outre, la mise en œuvre de concepts avancés tels que OSPFv3, les VLANs, et la sécurisation des équipements Cisco m’a permis de mieux comprendre les enjeux techniques d’une infrastructure réseau d’entreprise. Enfin, cette expérience m’a préparé aux défis du monde professionnel, en me donnant les outils nécessaires pour concevoir, déployer et sécuriser des infrastructures réseau complexe"
+            }
+        ];
+
+        // Fonctions JavaScript
+        function renderProjects() {
+            const projectsGrid = document.getElementById('projects-grid');
+            projectsGrid.innerHTML = '';
+
+            projects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.onclick = () => openProjectModal(project);
+
+                projectCard.innerHTML = `
+                    <img src="${project.image}" alt="${project.title}" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.shortDescription}</p>
+                    </div>
+                `;
+
+                projectsGrid.appendChild(projectCard);
+            });
+        }
+
+        function openProjectModal(project) {
+            const modal = document.getElementById('project-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalImage = document.getElementById('modal-image');
+            const modalDescription = document.getElementById('modal-description');
+            const modalLinkContainer = document.getElementById('modal-link-container');
+            const modalCompetences = document.getElementById('modal-competences');
+            const modalApprentissages = document.getElementById('modal-apprentissages');
+            const modalDifficultes = document.getElementById('modal-difficultes');
+            const modalTraces = document.getElementById('modal-traces');
+            const modalReflexion = document.getElementById('modal-reflexion');
+
+            modalTitle.textContent = project.title;
+            modalImage.src = project.image;
+            modalImage.alt = project.title;
+            modalDescription.textContent = project.description;
+            modalDifficultes.textContent = project.difficultes;
+            modalTraces.textContent = project.traces;
+            modalReflexion.textContent = project.reflexion;
+
+            // Gestion du lien (optionnel)
+            if (project.link && project.link.trim() !== '') {
+                modalLinkContainer.innerHTML = `<a href="${project.link}" class="project-link" target="_blank">Voir le projet</a>`;
+            } else {
+                modalLinkContainer.innerHTML = '';
+            }
+
+            // Compétences
+            modalCompetences.innerHTML = '';
+            project.competences.forEach(competence => {
+                const li = document.createElement('li');
+                li.textContent = competence;
+                modalCompetences.appendChild(li);
+            });
+
+            // Apprentissages
+            modalApprentissages.innerHTML = '';
+            project.apprentissages.forEach(apprentissage => {
+                const li = document.createElement('li');
+                li.textContent = apprentissage;
+                modalApprentissages.appendChild(li);
+            });
+
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Navigation smooth scroll
+        function smoothScroll(target) {
+            document.querySelector(target).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+
+            // Navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('href');
+                    smoothScroll(target);
+                });
+            });
+
+            // Close modal on click outside
+            document.getElementById('project-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'project-modal') {
+                    closeModal();
+                }
+            });
+
+            // Close modal on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
